@@ -1,0 +1,5 @@
+This project is provided under Apache License Version 2.0, aside from that
+individual files can be provided under a different licenses.
+
+For example, some files copied from original SoundTouch library are provided
+under GNU LESSER GENERAL PUBLIC LICENSE Version 2.1.
