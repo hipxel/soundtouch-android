@@ -131,14 +131,8 @@ Java_com_hipxel_soundtouch_SoundTouch_putSamples(JNIEnv *env, jobject thiz, jobj
 	if (numSamples <= 0)
 		return;
 
-	jbyte *jniBuffer = env->GetByteArrayElements(bytes, 0);
-
-	jbyte *offsetJniBuffer = jniBuffer + offsetBytes;
-
 	static_cast<SoundTouch *>(env->GetDirectBufferAddress(pointer))->putSamples(
-			(SAMPLETYPE *) offsetJniBuffer, numSamples);
-
-	env->ReleaseByteArrayElements(bytes, jniBuffer, 0);
+			env, bytes, offsetBytes, numSamples);
 }
 
 extern "C"
@@ -146,22 +140,17 @@ JNIEXPORT jint JNICALL
 Java_com_hipxel_soundtouch_SoundTouch_receiveSamplesBII(JNIEnv *env, jobject thiz, jobject pointer,
                                                         jbyteArray bytes, jint offsetBytes,
                                                         jint maxSamples) {
-	jbyte *jniBuffer = env->GetByteArrayElements(bytes, 0);
-
-	jbyte *offsetJniBuffer = jniBuffer + offsetBytes;
-
-	jint ret = static_cast<SoundTouch *>(env->GetDirectBufferAddress(pointer))->receiveSamples(
-			(SAMPLETYPE *) offsetJniBuffer, maxSamples);
-
-	env->ReleaseByteArrayElements(bytes, jniBuffer, 0);
-
-	return ret;
+	return static_cast<SoundTouch *>(env->GetDirectBufferAddress(pointer))->receiveSamples(
+			env, bytes, offsetBytes, maxSamples);
 }
 
 extern "C"
 JNIEXPORT jint JNICALL
 Java_com_hipxel_soundtouch_SoundTouch_receiveSamplesBI(JNIEnv *env, jobject thiz, jobject pointer,
                                                        jint maxSamples) {
+	if (maxSamples <= 0)
+		return 0;
+
 	return static_cast<SoundTouch *>(env->GetDirectBufferAddress(pointer))->receiveSamples(
 			maxSamples);
 }

@@ -200,4 +200,7 @@ namespace soundtouch
 #define ST_ABSTRACT(r) =0
 #endif
 
+// Support for JNI extra methods.
+// #define ST_JNI_EXTRA_METHODS    1
+
 #endif

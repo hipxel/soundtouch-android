@@ -123,6 +123,15 @@ public:
                             uint numSamples                         ///< Number of samples to insert.
                             );
 
+#ifdef ST_JNI_EXTRA_METHODS
+    virtual void putSamples(
+            JNIEnv *env,
+            jbyteArray bytes,
+            jint offsetBytes,
+            jint numSamples
+    );
+#endif
+
     /// Adjusts the book-keeping to increase number of samples in the buffer without 
     /// copying any actual samples.
     ///
@@ -140,6 +149,15 @@ public:
     virtual uint receiveSamples(SAMPLETYPE *output, ///< Buffer where to copy output samples.
                                 uint maxSamples                 ///< How many samples to receive at max.
                                 );
+
+#ifdef ST_JNI_EXTRA_METHODS
+    virtual uint receiveSamples(
+            JNIEnv *env,
+            jbyteArray bytes,
+            jint offsetBytes,
+            jint numSamples
+    );
+#endif
 
     /// Adjusts book-keeping so that given number of samples are removed from beginning of the 
     /// sample buffer without copying them anywhere. 

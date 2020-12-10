@@ -45,6 +45,10 @@
 #include <stdlib.h>
 #include "STTypes.h"
 
+#ifdef ST_JNI_EXTRA_METHODS
+#include <jni.h>
+#endif
+
 namespace soundtouch
 {
 
@@ -83,6 +87,14 @@ public:
                             uint numSamples             ///< Number of samples to insert.
                             ) ST_ABSTRACT();
 
+#ifdef ST_JNI_EXTRA_METHODS
+    virtual void putSamples(
+            JNIEnv *env,
+            jbyteArray bytes,
+            jint offsetBytes,
+            jint numSamples
+    ) ST_ABSTRACT();
+#endif
 
     // Moves samples from the 'other' pipe instance to this instance.
     void moveSamples(FIFOSamplePipe &other  ///< Other pipe instance where from the receive the data.
@@ -102,6 +114,15 @@ public:
     virtual uint receiveSamples(SAMPLETYPE *output, ///< Buffer where to copy output samples.
                                 uint maxSamples                 ///< How many samples to receive at max.
                                 ) ST_ABSTRACT(0);
+
+#ifdef ST_JNI_EXTRA_METHODS
+    virtual uint receiveSamples(
+            JNIEnv *env,
+            jbyteArray bytes,
+            jint offsetBytes,
+            jint maxSamples
+    ) ST_ABSTRACT(0);
+#endif
 
     /// Adjusts book-keeping so that given number of samples are removed from beginning of the 
     /// sample buffer without copying them anywhere. 
@@ -193,6 +214,18 @@ public:
     {
         return output->receiveSamples(outBuffer, maxSamples);
     }
+
+#ifdef ST_JNI_EXTRA_METHODS
+    virtual uint receiveSamples(
+            JNIEnv *env,
+            jbyteArray bytes,
+            jint offsetBytes,
+            jint maxSamples
+    )
+    {
+        return output->receiveSamples(env, bytes, offsetBytes, maxSamples);
+    }
+#endif
 
     /// Adjusts book-keeping so that given number of samples are removed from beginning of the 
     /// sample buffer without copying them anywhere. 

@@ -103,6 +103,22 @@ void FIFOSampleBuffer::putSamples(const SAMPLETYPE *samples, uint nSamples)
 }
 
 
+#ifdef ST_JNI_EXTRA_METHODS
+void FIFOSampleBuffer::putSamples(
+        JNIEnv *env,
+        jbyteArray bytes,
+        jint offsetBytes,
+        jint numSamples
+)
+{
+    jbyte *outputPtr = (jbyte*) ptrEnd(numSamples);
+    size_t numBytes = sizeof(SAMPLETYPE) * numSamples * channels;
+    env->GetByteArrayRegion(bytes, offsetBytes, numBytes, outputPtr);
+    samplesInBuffer += numSamples;
+}
+#endif
+
+
 // Increases the number of samples in the buffer without copying any actual
 // samples.
 //
@@ -217,6 +233,23 @@ uint FIFOSampleBuffer::receiveSamples(SAMPLETYPE *output, uint maxSamples)
     memcpy(output, ptrBegin(), channels * sizeof(SAMPLETYPE) * num);
     return receiveSamples(num);
 }
+
+
+#ifdef ST_JNI_EXTRA_METHODS
+uint FIFOSampleBuffer::receiveSamples(
+        JNIEnv *env,
+        jbyteArray bytes,
+        jint offsetBytes,
+        jint maxSamples
+)
+{
+    uint num = (maxSamples > samplesInBuffer) ? samplesInBuffer : maxSamples;
+    jbyte *outputPtr = (jbyte*) ptrBegin();
+    size_t numBytes = channels * sizeof(SAMPLETYPE) * num;
+    env->SetByteArrayRegion(bytes, offsetBytes, numBytes, outputPtr);
+    return receiveSamples(num);
+}
+#endif
 
 
 // Removes samples from the beginning of the sample buffer without copying them

@@ -231,6 +231,15 @@ public:
                                                     ///< contains both channels if stereo
             );
 
+#ifdef ST_JNI_EXTRA_METHODS
+    virtual void putSamples(
+            JNIEnv *env,
+            jbyteArray bytes,
+            jint offsetBytes,
+            jint numSamples
+    );
+#endif
+
     /// return nominal input sample requirement for triggering a processing batch
     int getInputSampleReq() const
     {

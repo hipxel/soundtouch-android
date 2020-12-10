@@ -733,6 +733,21 @@ void TDStretch::putSamples(const SAMPLETYPE *samples, uint nSamples)
 }
 
 
+#ifdef ST_JNI_EXTRA_METHODS
+void TDStretch::putSamples(
+        JNIEnv *env,
+        jbyteArray bytes,
+        jint offsetBytes,
+        jint numSamples
+)
+{
+    // Add the samples into the input buffer
+    inputBuffer.putSamples(env, bytes, offsetBytes, numSamples);
+    // Process the samples in input buffer
+    processSamples();
+}
+#endif
+
 
 /// Set new overlap length parameter & reallocate RefMidBuffer if necessary.
 void TDStretch::acceptNewOverlapLength(int newOverlapLength)

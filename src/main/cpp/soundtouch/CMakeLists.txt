@@ -45,6 +45,7 @@ target_compile_definitions(SoundTouch PUBLIC
 	SOUNDTOUCH_DISABLE_X86_OPTIMIZATIONS=1
 	USE_MULTICH_ALWAYS=1
 	ST_STL_NONE=1
+	ST_JNI_EXTRA_METHODS=1
 	)
 
 target_compile_options(SoundTouch PRIVATE

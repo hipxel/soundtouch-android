@@ -124,22 +124,40 @@ void RateTransposer::putSamples(const SAMPLETYPE *samples, uint nSamples)
 }
 
 
+#ifdef ST_JNI_EXTRA_METHODS
+void RateTransposer::putSamples(
+        JNIEnv *env,
+        jbyteArray bytes,
+        jint offsetBytes,
+        jint numSamples
+)
+{
+    processSamples(env, bytes, offsetBytes, numSamples);
+}
+#endif
+
+
 // Transposes sample rate by applying anti-alias filter to prevent folding. 
 // Returns amount of samples returned in the "dest" buffer.
 // The maximum amount of samples that can be returned at a time is set by
 // the 'set_returnBuffer_size' function.
 void RateTransposer::processSamples(const SAMPLETYPE *src, uint nSamples)
 {
-    uint count;
-
     if (nSamples == 0) return;
 
     // Store samples to input buffer
     inputBuffer.putSamples(src, nSamples);
 
+    processSamplesImpl();
+}
+
+void RateTransposer::processSamplesImpl()
+{
+    uint count;
+
     // If anti-alias filter is turned off, simply transpose without applying
     // the filter
-    if (bUseAAFilter == false) 
+    if (bUseAAFilter == false)
     {
         count = pTransposer->transpose(outputBuffer, inputBuffer);
         return;
@@ -148,7 +166,7 @@ void RateTransposer::processSamples(const SAMPLETYPE *src, uint nSamples)
     assert(pAAFilter);
 
     // Transpose with anti-alias filter
-    if (pTransposer->rate < 1.0f) 
+    if (pTransposer->rate < 1.0f)
     {
         // If the parameter 'Rate' value is smaller than 1, first transpose
         // the samples and then apply the anti-alias filter to remove aliasing.
@@ -158,8 +176,8 @@ void RateTransposer::processSamples(const SAMPLETYPE *src, uint nSamples)
 
         // Apply the anti-alias filter for transposed samples in midBuffer
         pAAFilter->evaluate(outputBuffer, midBuffer);
-    } 
-    else  
+    }
+    else
     {
         // If the parameter 'Rate' value is larger than 1, first apply the
         // anti-alias filter to remove high frequencies (prevent them from folding
@@ -172,6 +190,24 @@ void RateTransposer::processSamples(const SAMPLETYPE *src, uint nSamples)
         pTransposer->transpose(outputBuffer, midBuffer);
     }
 }
+
+
+#ifdef ST_JNI_EXTRA_METHODS
+void RateTransposer::processSamples(
+        JNIEnv *env,
+        jbyteArray bytes,
+        jint offsetBytes,
+        jint numSamples
+)
+{
+    if (numSamples == 0) return;
+
+    // Store samples to input buffer
+    inputBuffer.putSamples(env, bytes, offsetBytes, numSamples);
+
+    processSamplesImpl();
+}
+#endif
 
 
 // Sets the number of channels, 1 = mono, 2 = stereo

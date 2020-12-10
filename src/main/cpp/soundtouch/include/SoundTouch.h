@@ -289,6 +289,15 @@ public:
                                                     ///< contains data for both channels.
             );
 
+#ifdef ST_JNI_EXTRA_METHODS
+    virtual void putSamples(
+            JNIEnv *env,
+            jbyteArray bytes,
+            jint offsetBytes,
+            jint numSamples
+    );
+#endif
+
     /// Output samples from beginning of the sample buffer. Copies requested samples to 
     /// output buffer and removes them from the sample buffer. If there are less than 
     /// 'numsample' samples in the buffer, returns all that available.
@@ -297,6 +306,15 @@ public:
     virtual uint receiveSamples(SAMPLETYPE *output, ///< Buffer where to copy output samples.
         uint maxSamples                 ///< How many samples to receive at max.
         );
+
+#ifdef ST_JNI_EXTRA_METHODS
+    virtual uint receiveSamples(
+            JNIEnv *env,
+            jbyteArray bytes,
+            jint offsetBytes,
+            jint maxSamples
+    );
+#endif
 
     /// Adjusts book-keeping so that given number of samples are removed from beginning of the 
     /// sample buffer without copying them anywhere. 

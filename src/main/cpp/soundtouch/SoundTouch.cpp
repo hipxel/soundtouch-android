@@ -307,6 +307,45 @@ void SoundTouch::putSamples(const SAMPLETYPE *samples, uint nSamples)
     }
 }
 
+#ifdef ST_JNI_EXTRA_METHODS
+void SoundTouch::putSamples(
+        JNIEnv *env,
+        jbyteArray bytes,
+        jint offsetBytes,
+        jint numSamples
+)
+{
+    if (bSrateSet == false)
+    {
+        ST_THROW_RT_ERROR("SoundTouch : Sample rate not defined");
+    }
+    else if (channels == 0)
+    {
+        ST_THROW_RT_ERROR("SoundTouch : Number of channels not defined");
+    }
+
+    // accumulate how many samples are expected out from processing, given the current
+    // processing setting
+    samplesExpectedOut += (double)numSamples / ((double)rate * (double)tempo);
+
+#ifndef SOUNDTOUCH_PREVENT_CLICK_AT_RATE_CROSSOVER
+    if (rate <= 1.0f)
+    {
+        // transpose the rate down, output the transposed sound to tempo changer buffer
+        assert(output == pTDStretch);
+        pRateTransposer->putSamples(env, bytes, offsetBytes, numSamples);
+        pTDStretch->moveSamples(*pRateTransposer);
+    }
+    else
+#endif
+    {
+        // evaluate the tempo changer, then transpose the rate up,
+        assert(output == pRateTransposer);
+        pTDStretch->putSamples(env, bytes, offsetBytes, numSamples);
+        pRateTransposer->moveSamples(*pTDStretch);
+    }
+}
+#endif
 
 // Flushes the last samples from the processing pipeline to the output.
 // Clears also the internal processing buffers.
@@ -514,6 +553,21 @@ uint SoundTouch::receiveSamples(SAMPLETYPE *output, uint maxSamples)
     samplesOutput += (long)ret;
     return ret;
 }
+
+
+#ifdef ST_JNI_EXTRA_METHODS
+uint SoundTouch::receiveSamples(
+        JNIEnv *env,
+        jbyteArray bytes,
+        jint offsetBytes,
+        jint maxSamples
+)
+{
+    uint ret = FIFOProcessor::receiveSamples(env, bytes, offsetBytes, maxSamples);
+    samplesOutput += (long)ret;
+    return ret;
+}
+#endif
 
 
 /// Adjusts book-keeping so that given number of samples are removed from beginning of the 

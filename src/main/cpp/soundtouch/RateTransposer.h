@@ -97,6 +97,9 @@ public:
 ///
 class RateTransposer : public FIFOProcessor
 {
+private:
+    void processSamplesImpl();
+
 protected:
     /// Anti-alias filter object
     AAFilter *pAAFilter;
@@ -121,6 +124,15 @@ protected:
     /// the 'set_returnBuffer_size' function.
     void processSamples(const SAMPLETYPE *src, 
                         uint numSamples);
+
+#ifdef ST_JNI_EXTRA_METHODS
+    virtual void processSamples(
+            JNIEnv *env,
+            jbyteArray bytes,
+            jint offsetBytes,
+            jint numSamples
+    );
+#endif
 
 public:
     RateTransposer();
@@ -148,6 +160,15 @@ public:
     /// Adds 'numSamples' pcs of samples from the 'samples' memory position into
     /// the input of the object.
     void putSamples(const SAMPLETYPE *samples, uint numSamples);
+
+#ifdef ST_JNI_EXTRA_METHODS
+    void putSamples(
+            JNIEnv *env,
+            jbyteArray bytes,
+            jint offsetBytes,
+            jint numSamples
+    );
+#endif
 
     /// Clears all the samples in the object
     void clear();
