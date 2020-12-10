@@ -187,4 +187,17 @@ namespace soundtouch
 // quality compromise.
 //#define SOUNDTOUCH_PREVENT_CLICK_AT_RATE_CROSSOVER   1
 
+// Support for "ANDROID_STL=none".
+// #define ST_STL_NONE    1
+
+// Some compilers implement pure virtual functions by referring f.e. to
+// __cxa_pure_virtual, that may not be present if STL NONE is used.
+// In order to make classes with abstract function compile, ST_ABSTRACT
+// should be used instead of =0 when declaring such functions.
+#ifdef ST_STL_NONE
+#define ST_ABSTRACT(r) { ST_THROW_RT_ERROR("called pure virtual function"); return r; }
+#else
+#define ST_ABSTRACT(r) =0
+#endif
+
 #endif

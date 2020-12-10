@@ -59,17 +59,17 @@ public:
     };
 
 protected:
-    virtual void resetRegisters() = 0;
+    virtual void resetRegisters() ST_ABSTRACT();
 
     virtual int transposeMono(SAMPLETYPE *dest, 
                         const SAMPLETYPE *src, 
-                        int &srcSamples)  = 0;
+                        int &srcSamples) ST_ABSTRACT(0);
     virtual int transposeStereo(SAMPLETYPE *dest, 
                         const SAMPLETYPE *src, 
-                        int &srcSamples) = 0;
+                        int &srcSamples) ST_ABSTRACT(0);
     virtual int transposeMulti(SAMPLETYPE *dest, 
                         const SAMPLETYPE *src, 
-                        int &srcSamples) = 0;
+                        int &srcSamples) ST_ABSTRACT(0);
 
     static ALGORITHM algorithm;
 
@@ -83,7 +83,7 @@ public:
     virtual int transpose(FIFOSampleBuffer &dest, FIFOSampleBuffer &src);
     virtual void setRate(double newRate);
     virtual void setChannels(int channels);
-    virtual int getLatency() const = 0;
+    virtual int getLatency() const ST_ABSTRACT(0);
 
     // static factory function
     static TransposerBase *newInstance();

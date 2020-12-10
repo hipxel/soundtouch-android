@@ -75,13 +75,13 @@ public:
     /// When using this function to output samples, also remember to 'remove' the
     /// output samples from the buffer by calling the 
     /// 'receiveSamples(numSamples)' function
-    virtual SAMPLETYPE *ptrBegin() = 0;
+    virtual SAMPLETYPE *ptrBegin() ST_ABSTRACT(0);
 
     /// Adds 'numSamples' pcs of samples from the 'samples' memory position to
     /// the sample buffer.
     virtual void putSamples(const SAMPLETYPE *samples,  ///< Pointer to samples.
                             uint numSamples             ///< Number of samples to insert.
-                            ) = 0;
+                            ) ST_ABSTRACT();
 
 
     // Moves samples from the 'other' pipe instance to this instance.
@@ -101,7 +101,7 @@ public:
     /// \return Number of samples returned.
     virtual uint receiveSamples(SAMPLETYPE *output, ///< Buffer where to copy output samples.
                                 uint maxSamples                 ///< How many samples to receive at max.
-                                ) = 0;
+                                ) ST_ABSTRACT(0);
 
     /// Adjusts book-keeping so that given number of samples are removed from beginning of the 
     /// sample buffer without copying them anywhere. 
@@ -109,20 +109,20 @@ public:
     /// Used to reduce the number of samples in the buffer when accessing the sample buffer directly
     /// with 'ptrBegin' function.
     virtual uint receiveSamples(uint maxSamples   ///< Remove this many samples from the beginning of pipe.
-                                ) = 0;
+                                ) ST_ABSTRACT(0);
 
     /// Returns number of samples currently available.
-    virtual uint numSamples() const = 0;
+    virtual uint numSamples() const ST_ABSTRACT(0);
 
     // Returns nonzero if there aren't any samples available for outputting.
-    virtual int isEmpty() const = 0;
+    virtual int isEmpty() const ST_ABSTRACT(0);
 
     /// Clears all the samples.
-    virtual void clear() = 0;
+    virtual void clear() ST_ABSTRACT();
 
     /// allow trimming (downwards) amount of samples in pipeline.
     /// Returns adjusted amount of samples
-    virtual uint adjustAmountOfSamples(uint numSamples) = 0;
+    virtual uint adjustAmountOfSamples(uint numSamples) ST_ABSTRACT(0);
 
 };
 

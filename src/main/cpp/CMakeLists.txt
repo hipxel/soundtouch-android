@@ -24,7 +24,7 @@ add_library(HipxelSoundTouch SHARED
 
 set_property(TARGET HipxelSoundTouch PROPERTY CXX_STANDARD 98)
 
-target_link_libraries(HipxelSoundTouch
+target_link_libraries(HipxelSoundTouch PRIVATE
 	SoundTouch
 	log
 	)

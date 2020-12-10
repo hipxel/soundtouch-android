@@ -71,9 +71,11 @@ public:
     FIRFilter();
     virtual ~FIRFilter();
 
-    /// Operator 'new' is overloaded so that it automatically creates a suitable instance 
+#ifndef ST_STL_NONE
+    /// Operator 'new' is overloaded so that it automatically creates a suitable instance
     /// depending on if we've a MMX-capable CPU available or not.
     static void * operator new(size_t s);
+#endif
 
     static FIRFilter *newInstance();
 

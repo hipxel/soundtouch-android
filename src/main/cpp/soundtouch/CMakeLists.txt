@@ -18,6 +18,7 @@ cmake_minimum_required(VERSION 3.4.1)
 
 set(ST_SOURCES
 	AAFilter.cpp
+	AndroidSTLNone.cpp
 	cpu_detect_x86.cpp
 	FIFOSampleBuffer.cpp
 	FIRFilter.cpp
@@ -43,6 +44,7 @@ target_compile_definitions(SoundTouch PUBLIC
 	SOUNDTOUCH_INTEGER_SAMPLES=1
 	SOUNDTOUCH_DISABLE_X86_OPTIMIZATIONS=1
 	USE_MULTICH_ALWAYS=1
+	ST_STL_NONE=1
 	)
 
 target_compile_options(SoundTouch PRIVATE
