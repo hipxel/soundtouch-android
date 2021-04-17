@@ -25,3 +25,6 @@ sources of ".so" file so user can rebuild it and replace in final product).
 Because ".so" file is dynamically loaded/linked, the rest of ".apk" may keep
 its license, however sources of this library have to be provided/linked
 in the application, so user can, compile lib and replace it in ".apk".
+
+## Try it
+You can check (hear) code in action, in this app: [Music Speed Changer](https://play.google.com/store/apps/details?id=com.hipxel.audio.music.speed.changer)
