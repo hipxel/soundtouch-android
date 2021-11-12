@@ -110,6 +110,10 @@ class SoundTouch {
 		return setSetting(pointer, setting.value, value)
 	}
 
+	fun setTDStretchParameters(sampleRate: Int, sequenceMs: Int, seekWindowMs: Int, overlapMs: Int) {
+		setTDStretchParameters(pointer, sampleRate, sequenceMs, seekWindowMs, overlapMs)
+	}
+
 	fun getSetting(setting: Setting): Int {
 		return getSetting(pointer, setting.value)
 	}
@@ -163,6 +167,8 @@ class SoundTouch {
 	private external fun clear(pointer: ByteBuffer)
 
 	private external fun setSetting(pointer: ByteBuffer, settingId: Int, value: Int): Boolean
+
+	private external fun setTDStretchParameters(pointer: ByteBuffer, sampleRate: Int, sequenceMs: Int, seekWindowMs: Int, overlapMs: Int)
 
 	private external fun getSetting(pointer: ByteBuffer, settingId: Int): Int
 

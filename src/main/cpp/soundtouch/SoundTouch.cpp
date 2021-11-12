@@ -432,6 +432,18 @@ bool SoundTouch::setSetting(int settingId, int value)
 }
 
 
+/// Changes a settings (in bulk) related to TD Stretch.
+void SoundTouch::setTDStretchParameters(
+		int sampleRate,
+		int sequenceMs,
+		int seekWindowMs,
+		int overlapMs
+)
+{
+	pTDStretch->setParameters(sampleRate, sequenceMs, seekWindowMs, overlapMs);
+}
+
+
 // Reads a setting controlling the processing system behaviour. See the
 // 'SETTING_...' defines for available setting ID's.
 //

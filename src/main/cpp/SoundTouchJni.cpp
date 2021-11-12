@@ -170,6 +170,16 @@ Java_com_hipxel_soundtouch_SoundTouch_setSetting(JNIEnv *env, jobject thiz, jobj
 }
 
 extern "C"
+JNIEXPORT void JNICALL
+Java_com_hipxel_soundtouch_SoundTouch_setTDStretchParameters(JNIEnv *env, jobject thiz,
+                                                             jobject pointer, jint sampleRate,
+                                                             jint sequenceMs, jint seekWindowMs,
+                                                             jint overlapMs) {
+	static_cast<SoundTouch *>(env->GetDirectBufferAddress(pointer))->setTDStretchParameters(
+			sampleRate, sequenceMs, seekWindowMs, overlapMs);
+}
+
+extern "C"
 JNIEXPORT jint JNICALL
 Java_com_hipxel_soundtouch_SoundTouch_getSetting(JNIEnv *env, jobject thiz, jobject pointer,
                                                  jint settingId) {

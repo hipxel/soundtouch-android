@@ -336,6 +336,13 @@ public:
                     int value        ///< New setting value.
                     );
 
+    /// Changes a settings (in bulk) related to TD Stretch.
+    void setTDStretchParameters(int sampleRate,   ///< Sample rate.
+                                int sequenceMs,   ///< Seq ms.
+                                int seekWindowMs, ///< Window ms.
+                                int overlapMs     ///< Overlap ms.
+    );
+
     /// Reads a setting controlling the processing system behaviour. See the
     /// 'SETTING_...' defines for available setting ID's.
     ///
