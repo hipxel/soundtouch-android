@@ -52,4 +52,5 @@ target_compile_options(SoundTouch PRIVATE
 	-fno-rtti
 	-fno-exceptions
 	-fvisibility=hidden
+	-Ofast
 	)
